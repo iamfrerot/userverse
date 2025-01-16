@@ -1,6 +1,7 @@
 package dev.frerot.userverse.configuration;
 
 import dev.frerot.userverse.dto.ErrorResponse;
+import dev.frerot.userverse.user.exceptions.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -70,9 +71,11 @@ public class GlobalExceptionHandler {
         Map<String, String> errors=new HashMap<>();
         errors.put("missing parameter",ex.getParameterName());
         errors.put("type",ex.getParameterType());
-
-        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(false,HttpStatus.BAD_REQUEST.value(), "invalid request",errors));
-
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(false,HttpStatus.BAD_REQUEST.value(), "Invalid request",errors));
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex){
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(false,HttpStatus.NOT_FOUND.value(), "User not found",ex.getMessage()));
     }
 
 }

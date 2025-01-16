@@ -38,4 +38,10 @@ public class UserController {
         String message = "There are: "+ usersfromcountry.size() +" users from "+ countryToUpperCase;
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),message,userService.getUserByCountry(countryToUpperCase)));
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse> getUserById(@PathVariable String id) {
+       return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),"user found with: "+ id, userService.getUserById(id)));
+    }
 }

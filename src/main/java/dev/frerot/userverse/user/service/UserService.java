@@ -8,4 +8,5 @@ public interface UserService {
     List<User> findAllUsers();
     NewUser addUser(NewUser user);
     List<User> getUserByCountry(String country);
+    User getUserById(String id);
 }

@@ -7,7 +7,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepoImp implements UserRepo{
@@ -35,5 +38,10 @@ public class UserRepoImp implements UserRepo{
         query.addCriteria(Criteria.where("country").is(country));
         query.with(Sort.by(Sort.Direction.ASC, "firstname"));
         return mongoTemplate.find(query,User.class);
+    }
+
+    @Override
+    public User findUserById(String id) {
+      return mongoTemplate.findById(id,User.class);
     }
 }
