@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserRepo {
     List<User> getAllUsers();
     NewUser saveUser(NewUser user);
+    List<User> getAllUsersByCountry(String country);
 }

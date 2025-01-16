@@ -22,4 +22,6 @@ public class NewUser {
     private String birthdate;
     @NotBlank
     private String phone;
+    @NotBlank
+    private String country;
 }

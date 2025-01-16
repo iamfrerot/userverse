@@ -7,4 +7,5 @@ import java.util.List;
 public interface UserService {
     List<User> findAllUsers();
     NewUser addUser(NewUser user);
+    List<User> getUserByCountry(String country);
 }

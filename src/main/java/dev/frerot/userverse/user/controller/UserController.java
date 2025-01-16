@@ -30,4 +30,12 @@ public class UserController {
         NewUser createdUser = userService.addUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(true,HttpStatus.CREATED.value(), "User Created Successfully",createdUser));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<SuccessResponse> getUsersByCountry(@RequestParam String country){
+        String countryToUpperCase=country.toUpperCase();
+        List<User> usersfromcountry=userService.getUserByCountry(countryToUpperCase);
+        String message = "There are: "+ usersfromcountry.size() +" users from "+ countryToUpperCase;
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),message,userService.getUserByCountry(countryToUpperCase)));
+    }
 }

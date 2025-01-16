@@ -22,4 +22,9 @@ public class UserServiceImpl implements UserService{
     public NewUser addUser(NewUser user) {
         return userRepo.saveUser(user);
     }
+
+    @Override
+    public List<User> getUserByCountry(String country) {
+        return userRepo.getAllUsersByCountry(country);
+    }
 }
