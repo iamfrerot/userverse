@@ -1,9 +1,12 @@
 package dev.frerot.userverse.user.service;
 
+import dev.frerot.userverse.dto.ErrorResponse;
+import dev.frerot.userverse.dto.SuccessResponse;
 import dev.frerot.userverse.user.exceptions.UserNotFoundException;
-import dev.frerot.userverse.user.model.NewUser;
 import dev.frerot.userverse.user.model.User;
 import dev.frerot.userverse.user.repository.UserRepo;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +17,14 @@ public class UserServiceImpl implements UserService{
     public UserServiceImpl(UserRepo userRepo){
         this.userRepo=userRepo;
     }
-    @Override
-    public List<User> findAllUsers() {
-        return userRepo.getAllUsers();
-    }
 
     @Override
-    public NewUser addUser(NewUser user) {
-        return userRepo.saveUser(user);
+    public ResponseEntity<?> findAllUsers(int page, int size) {
+       List<User> users =userRepo.getAllUsers(page, size);
+       if(!users.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true, HttpStatus.OK.value(),"Users returned successfully",users));
+       }
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(false, HttpStatus.NO_CONTENT.value(), "no users found in chosen range"+" page: "+page+" size: "+size, "no users found in chosen range"+" page: "+page+" size: "+size));
     }
 
     @Override

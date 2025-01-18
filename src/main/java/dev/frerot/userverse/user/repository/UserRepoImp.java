@@ -1,16 +1,14 @@
 package dev.frerot.userverse.user.repository;
 
-import dev.frerot.userverse.user.model.NewUser;
 import dev.frerot.userverse.user.model.User;
+import dev.frerot.userverse.utils.RandomUserGenerator;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserRepoImp implements UserRepo{
@@ -20,17 +18,16 @@ public class UserRepoImp implements UserRepo{
         this.mongoTemplate=mongoTemplate;
     }
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(int page, int size) {
         Query query= new Query();
+        if(page>0 && size>0){
+            query.limit(size);
+            query.skip((long) (page - 1) * size);
+        }
         query.with(Sort.by(Sort.Direction.ASC,"firstname"));
         return mongoTemplate.find(query,User.class);
     }
 
-    @Override
-    public NewUser saveUser(NewUser user) {
-        return mongoTemplate.save(user,"users");
-
-    }
 
     @Override
     public List<User> getAllUsersByCountry(String country) {
@@ -43,5 +40,13 @@ public class UserRepoImp implements UserRepo{
     @Override
     public User findUserById(String id) {
       return mongoTemplate.findById(id,User.class);
+    }
+
+    @Override
+    public RandomUserGenerator saveUser( ) {
+        for (int i = 1; i < 100; i++) {
+            mongoTemplate.save(new RandomUserGenerator(), "users");
+        }
+        return mongoTemplate.save(new RandomUserGenerator(),"users");
     }
 }

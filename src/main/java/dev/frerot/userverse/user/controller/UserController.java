@@ -1,8 +1,8 @@
 package dev.frerot.userverse.user.controller;
 
 import dev.frerot.userverse.dto.ErrorResponse;
+import dev.frerot.userverse.dto.Login;
 import dev.frerot.userverse.dto.SuccessResponse;
-import dev.frerot.userverse.user.model.NewUser;
 import dev.frerot.userverse.user.model.User;
 import dev.frerot.userverse.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,26 @@ public class UserController {
     @Operation(
             summary = "Get all users End point",
             description = "This endpoint returns all users in the database",
+            parameters = {
+                    @Parameter(
+                            name = "page",
+                            description = "The page number to return",
+                            required = true,
+                            content = @Content(schema = @Schema(implementation = int.class))
+                    ),
+                    @Parameter(
+                            name = "size",
+                            description = "The number of users to return",
+                            required = true,
+                            content = @Content(schema = @Schema(implementation = int.class))
+                    )
+            },
             responses = {
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "no users found in chosen range page: {int} size: {int}",
+                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
+                    ),
                     @ApiResponse(
                             responseCode = "200",
                             description = "All users returned successfully",
@@ -46,75 +66,11 @@ public class UserController {
 
     )
     @GetMapping
-    public ResponseEntity<SuccessResponse> getUsers(){
-        List<User> users =userService.findAllUsers();
-        return ResponseEntity.ok(new SuccessResponse(true, HttpStatus.OK.value(), "All users returned successfully",users));
+    @SecurityRequirement(name = "Bearer Auth")
+    public ResponseEntity<?> getUsers(@Parameter(required = true) int page, @Parameter(required = true) int size) {
+      return userService.findAllUsers(page, size);
     }
 
-    @Operation(
-            summary = "Create a new user",
-            description = "This endpoint creates a new user in the database",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "User created successfully",
-                            content = {@Content(schema = @Schema(implementation = SuccessResponse.class))}
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Bad Request",
-                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal Server Error",
-                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
-                    )
-            }
-    )
-    @PostMapping
-    public ResponseEntity<SuccessResponse> createUser(@Valid  @RequestBody NewUser user){
-        NewUser createdUser = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(true,HttpStatus.CREATED.value(), "User Created Successfully",createdUser));
-    }
-
-
-    @Operation(
-            summary = "Search users by country",
-            description = "This endpoint gets all users from a specific country",
-            parameters = {
-                    @Parameter(
-                            name = "country",
-                            description = "The country to search for",
-                            required = true,
-                            content = @Content(schema = @Schema(implementation = String.class))
-                    )
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Users found successfully",
-                            content = {@Content(schema = @Schema(implementation = SuccessResponse.class))}
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "No users found",
-                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal Server Error",
-                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
-                    )
-            }
-    )
-    @GetMapping("/search")
-    public ResponseEntity<SuccessResponse> getUsersByCountry(@RequestParam String country){
-        String countryToUpperCase=country.toUpperCase();
-        List<User> usersfromcountry=userService.getUserByCountry(countryToUpperCase);
-        String message = "There are: "+ usersfromcountry.size() +" users from "+ countryToUpperCase;
-        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),message,userService.getUserByCountry(countryToUpperCase)));
-    }
 
     @Operation(
             summary = "Get user by id",
@@ -146,7 +102,31 @@ public class UserController {
             }
     )
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer Auth")
     public ResponseEntity<SuccessResponse> getUserById(@PathVariable String id) {
-       return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),"user found with: "+ id, userService.getUserById(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true,HttpStatus.OK.value(),"user found with: "+ id, userService.getUserById(id)));
+    }
+
+
+    @Operation(
+            summary = "login a user",
+            description = "This endpoint logs in a user",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "User logged in successfully",
+                            content = {@Content(schema = @Schema(implementation = SuccessResponse.class))}
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Credentials",
+                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class))}
+                    ),
+            }
+    )
+    @PostMapping
+    public ResponseEntity<SuccessResponse> login(@Valid @RequestBody Login credentials){
+
+        return ResponseEntity.ok(new SuccessResponse(true, HttpStatus.OK.value(), "User logged in successfully", credentials));
     }
 }
