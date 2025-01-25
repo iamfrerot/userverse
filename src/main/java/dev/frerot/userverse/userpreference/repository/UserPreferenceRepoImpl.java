@@ -1,7 +1,7 @@
 package dev.frerot.userverse.userpreference.repository;
 
 
-import com.github.javafaker.Faker;
+import dev.frerot.userverse.userpreference.model.NewUserPreference;
 import dev.frerot.userverse.userpreference.model.UserPreference;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,8 +27,16 @@ public class UserPreferenceRepoImpl implements UserPreferenceRepo {
     }
 
     @Override
-    public UserPreference saveUserPreference(String userid, UserPreference userPreference) {
-        userPreference.setUserid(userid);
+    public UserPreference saveUserPreference(String userid, NewUserPreference userPre) {
+
+        UserPreference userPreference= UserPreference.builder()
+                .userid(userid)
+                .darkmode(userPre.isDarkmode())
+                .preferedlanguage(userPre.getPreferedlanguage())
+                .darkmode(userPre.isDarkmode())
+                .smsnotification(userPre.isSmsnotification())
+                .emailnotification(userPre.isEmailnotification())
+                .build();
         return mongoTemplate.save(userPreference,"userpreference");
     }
 }

@@ -2,6 +2,7 @@ package dev.frerot.userverse.userpreference.service;
 
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceExists;
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceNotFound;
+import dev.frerot.userverse.userpreference.model.NewUserPreference;
 import dev.frerot.userverse.userpreference.model.UserPreference;
 import dev.frerot.userverse.userpreference.repository.UserPreferenceRepo;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UserPreferenceServiceImpl implements UserPreferenceService{
     }
 
     @Override
-    public UserPreference saveUserPreference(String userid, UserPreference userPreference) {
+    public UserPreference saveUserPreference(String userid, NewUserPreference userPreference) {
         if(userPreferenceRepo.findUserPreferenceByUserId(userid).isPresent()){
             throw new UserPreferenceExists("UserPreference already exists with: "+userid);
         }

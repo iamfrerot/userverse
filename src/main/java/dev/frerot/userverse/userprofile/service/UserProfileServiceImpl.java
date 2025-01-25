@@ -2,6 +2,7 @@ package dev.frerot.userverse.userprofile.service;
 
 import dev.frerot.userverse.userprofile.exceptions.UserProfileExists;
 import dev.frerot.userverse.userprofile.exceptions.UserProfileNotFound;
+import dev.frerot.userverse.userprofile.model.NewUserProfile;
 import dev.frerot.userverse.userprofile.model.UserProfile;
 import dev.frerot.userverse.userprofile.repository.UserProfileRepo;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfile saveUserProfile(String userId, UserProfile userProfile) {
+    public UserProfile saveUserProfile(String userId, NewUserProfile userProfile) {
         UserProfile found = userProfileRepo.findUserProfileByUserId(userId);
         if(found != null){
             throw new UserProfileExists("User profile already exists with userId: " + userId);

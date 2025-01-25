@@ -1,6 +1,6 @@
 package dev.frerot.userverse.userprofile.repository;
 
-import com.github.javafaker.Faker;
+import dev.frerot.userverse.userprofile.model.NewUserProfile;
 import dev.frerot.userverse.userprofile.model.UserProfile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserProfileRepoImpl implements UserProfileRepo {
-    Faker faker = new Faker();
     private final MongoTemplate mongoTemplate;
     public UserProfileRepoImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
@@ -22,8 +21,13 @@ public class UserProfileRepoImpl implements UserProfileRepo {
     }
 
     @Override
-    public UserProfile saveUserProfile(String userId, UserProfile userProfile) {
-        userProfile.setUserid(userId);
-        return mongoTemplate.save(userProfile, "userprofile");
+    public UserProfile saveUserProfile(String userId, NewUserProfile user) {
+        UserProfile userprofile =  UserProfile.builder()
+                .bio(user.getBio())
+                .profile_image(user.getProfile_image())
+                .userid(userId)
+                .website(user.getWebsite())
+                .build();
+        return mongoTemplate.save(userprofile, "userprofile");
     }
 }

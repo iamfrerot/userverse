@@ -97,12 +97,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserPreferenceExists.class)
     public ResponseEntity<ErrorResponse> handleUserPreferenceExists(UserPreferenceExists ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(false,HttpStatus.NOT_FOUND.value(), "User preference already exists",ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(false,HttpStatus.CONFLICT.value(), "User preference already exists",ex.getMessage()));
     }
 
     @ExceptionHandler(UserProfileExists.class)
     public ResponseEntity<ErrorResponse> handleUserProfileExists(UserProfileExists ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(false,HttpStatus.NOT_FOUND.value(), "User profile already exists",ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(false,HttpStatus.CONFLICT.value(), "User profile already exists",ex.getMessage()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
