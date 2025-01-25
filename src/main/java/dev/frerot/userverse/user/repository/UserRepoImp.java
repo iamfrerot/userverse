@@ -1,7 +1,6 @@
 package dev.frerot.userverse.user.repository;
 
 import dev.frerot.userverse.user.model.User;
-import dev.frerot.userverse.utils.RandomUserGenerator;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,9 +17,9 @@ public class UserRepoImp implements UserRepo{
         this.mongoTemplate=mongoTemplate;
     }
     @Override
-    public List<User> getAllUsers(int page, int size) {
+    public List<User> getAllUsers(Integer page, Integer size) {
         Query query= new Query();
-        if(page>0 && size>0){
+        if(page != null && size != null){
             query.limit(size);
             query.skip((long) (page - 1) * size);
         }
@@ -42,11 +41,4 @@ public class UserRepoImp implements UserRepo{
       return mongoTemplate.findById(id,User.class);
     }
 
-    @Override
-    public RandomUserGenerator saveUser( ) {
-        for (int i = 1; i < 100; i++) {
-            mongoTemplate.save(new RandomUserGenerator(), "users");
-        }
-        return mongoTemplate.save(new RandomUserGenerator(),"users");
-    }
 }

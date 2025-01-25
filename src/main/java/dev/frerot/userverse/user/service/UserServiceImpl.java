@@ -1,12 +1,8 @@
 package dev.frerot.userverse.user.service;
 
-import dev.frerot.userverse.dto.ErrorResponse;
-import dev.frerot.userverse.dto.SuccessResponse;
 import dev.frerot.userverse.user.exceptions.UserNotFoundException;
 import dev.frerot.userverse.user.model.User;
 import dev.frerot.userverse.user.repository.UserRepo;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +15,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseEntity<?> findAllUsers(int page, int size) {
+    public List<User> findAllUsers(Integer page, Integer size) {
        List<User> users =userRepo.getAllUsers(page, size);
-       if(!users.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse(true, HttpStatus.OK.value(),"Users returned successfully",users));
+       if(users.isEmpty() && page != null && size != null){
+           throw new UserNotFoundException("No users found in range: "+page+" - "+size);
        }
-         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(false, HttpStatus.NO_CONTENT.value(), "no users found in chosen range"+" page: "+page+" size: "+size, "no users found in chosen range"+" page: "+page+" size: "+size));
+       if(users.isEmpty()) {
+           throw new UserNotFoundException("No users found");
+       }
+         return users;
     }
 
     @Override

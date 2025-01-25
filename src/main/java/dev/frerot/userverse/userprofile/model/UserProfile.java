@@ -1,6 +1,8 @@
-package dev.frerot.userverse.user.model;
+package dev.frerot.userverse.userprofile.model;
 
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -8,22 +10,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-
-@Document(collection = "users")
+@Document(collection = "userprofile")
 @Data
 @Builder
-public class User {
+public class UserProfile {
     @Id
+    private String id;
     private String userid;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String username;
-    private String password;
-    private String birthdate;
-    private String phone;
-    private String country;
-    private boolean active;
+    @NotBlank
+    private String profile_image;
+    @NotBlank
+    private String bio;
+    @NotBlank
+    private String website;
     @CreatedDate
     private LocalDateTime created_at;
     @LastModifiedDate
