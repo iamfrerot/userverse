@@ -1,5 +1,7 @@
 package dev.frerot.userverse.userpreference.service;
 
+import dev.frerot.userverse.user.exceptions.UserNotFoundException;
+import dev.frerot.userverse.user.service.UserService;
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceExists;
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceNotFound;
 import dev.frerot.userverse.userpreference.model.NewUserPreference;
@@ -12,9 +14,11 @@ import java.util.Optional;
 @Service
 public class UserPreferenceServiceImpl implements UserPreferenceService{
     private final UserPreferenceRepo userPreferenceRepo;
+    private final UserService userService;
 
-    public UserPreferenceServiceImpl(UserPreferenceRepo userPreferenceRepo) {
+    public UserPreferenceServiceImpl(UserPreferenceRepo userPreferenceRepo, UserService userService) {
         this.userPreferenceRepo = userPreferenceRepo;
+        this.userService=userService;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class UserPreferenceServiceImpl implements UserPreferenceService{
 
     @Override
     public UserPreference saveUserPreference(String userid, NewUserPreference userPreference) {
+        userService.getUserById(userid);
         if(userPreferenceRepo.findUserPreferenceByUserId(userid).isPresent()){
             throw new UserPreferenceExists("UserPreference already exists with: "+userid);
         }

@@ -37,6 +37,6 @@ public class UserServiceImpl implements UserService{
         if(user != null){
            return user;
         }
-        throw new UserNotFoundException("User not found with id: "+id);
+        throw new UserNotFoundException("User doesn't exists with id: "+id);
     }
 }
