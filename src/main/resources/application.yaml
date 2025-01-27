@@ -4,4 +4,4 @@ spring:
   application:
     name: userverse
   profiles:
-    active: dev
+    active: ${PROFILE:dev}
