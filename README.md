@@ -28,7 +28,7 @@ spring:
   data:
     mongodb:
       database: ${MONGODB_DATABASE:userverse}
-      uri: ${MONGODB_URI:mongo
+      uri: ${MONGODB_URI:mongodb://localhost:27017}}
 ```
 
 ### `application-prod.yaml`
