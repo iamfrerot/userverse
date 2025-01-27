@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine3.13
+FROM openjdk:24-slim
 
 # Set the working directory
 WORKDIR /app

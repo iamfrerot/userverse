@@ -19,7 +19,7 @@ spring:
   application:
     name: userverse
   profiles:
-    active: dev
+    active: ${PROFILE:dev}
 ```
 
 ### `application-dev.yaml`
@@ -28,7 +28,7 @@ spring:
   data:
     mongodb:
       database: ${MONGODB_DATABASE:userverse}
-      uri: ${MONGODB_URI:mongodb://localhost:27017}
+      uri: ${MONGODB_URI:mongo
 ```
 
 ### `application-prod.yaml`
