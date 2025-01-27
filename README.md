@@ -1,7 +1,7 @@
 # Userverse 
 
 ## Overview
-Userverse is a Java-based application that uses Spring Boot and MongoDB. The project is built using Maven and is containerized using Docker. This project provides an API for data analysis.erverse is a Java-based application that uses Spring Boot and MongoDB. The project is built using Maven and is containerized using Docker. This project provides an API for data analysis.
+Userverse is a Java-based application that uses Spring Boot and MongoDB. The project is built using Maven and is containerized using Docker. This project provides an API for data analysis.
 
 ## Prerequisites
 - Java 17
