@@ -64,7 +64,7 @@ docker build -t userverse .
 ### Running the Docker Container
 To run the Docker container, use:
 ```sh
-docker run --name my_userverse -p 8080:2000 -e MONGODB_URI=mongodb://host.docker.internal:27017 userverse
+docker run --name my_userverse -p 2000:2000 -e MONGODB_URI=mongodb://host.docker.internal:27017 userverse
 ```
 
 ## Endpoints
