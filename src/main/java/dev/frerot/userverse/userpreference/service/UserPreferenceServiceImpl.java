@@ -1,15 +1,15 @@
 package dev.frerot.userverse.userpreference.service;
 
-import dev.frerot.userverse.user.exceptions.UserNotFoundException;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import dev.frerot.userverse.user.service.UserService;
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceExists;
 import dev.frerot.userverse.userpreference.exceptions.UserPreferenceNotFound;
 import dev.frerot.userverse.userpreference.model.NewUserPreference;
 import dev.frerot.userverse.userpreference.model.UserPreference;
 import dev.frerot.userverse.userpreference.repository.UserPreferenceRepo;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserPreferenceServiceImpl implements UserPreferenceService{

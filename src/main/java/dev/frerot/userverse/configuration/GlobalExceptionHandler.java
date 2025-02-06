@@ -17,6 +17,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -26,25 +27,27 @@ import java.util.regex.Pattern;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, HttpServletRequest request) {
-        System.err.println("------- Error------");
+        System.err.println("------- Error Start ------");
         System.err.println(ex.getMessage());
         System.err.println(ex.getClass());
-        System.err.println("End-Point: "+request.getRequestURI());
+        System.err.println("end-point: "+request.getRequestURI());
+        System.err.println("Date: "+ LocalDate.now());
         System.err.println("------ End Error ------");
 
-        Map<String,Object> error=new HashMap<>();
-
+        Map<String,Object> error= new HashMap<>();
         error.put("error",ex.getLocalizedMessage());
-        error.put("timestamp",System.currentTimeMillis());
+        error.put("Date",LocalDate.now());
+        error.put("end-point",request.getRequestURI());
+
         ErrorResponse responseBody = new ErrorResponse(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error", error);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-    };
+    }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<ErrorResponse> handleAlreadyExistingEmailI(Exception ex){
         // Extracting relevant details from the exception
         String message = "A record with the same key already exists.";
-        String duplicateValue = null;
+        String duplicateValue;
 
         Pattern pattern = Pattern.compile("dup key: \\{ (.+?) }");
         Matcher matcher = pattern.matcher(ex.getMessage());
@@ -111,7 +114,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(false,HttpStatus.BAD_REQUEST.value(), "Invalid request","Required request body is missing"));
     }
 }

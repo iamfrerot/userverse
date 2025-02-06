@@ -33,3 +33,6 @@ build/
 
 ### Macos Files ###
 .DS_Store
+
+### Environment ###
+.env
