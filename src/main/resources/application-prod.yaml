@@ -3,3 +3,7 @@ spring:
     mongodb:
       database: ${MONGODB_DATABASE:userverse}
       uri: ${MONGODB_URI}
+springdoc:
+  server:
+    url: ${SERVER_URL}
+    description: ${SERVER_DESCRIPTION}

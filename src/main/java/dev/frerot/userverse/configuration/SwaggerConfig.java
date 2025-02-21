@@ -1,13 +1,12 @@
 package dev.frerot.userverse.configuration;
 
-
-
 import io.swagger.v3.oas.models.servers.Server;
 
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +14,13 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${springdoc.server.url}")
+    private String serverUrl;
+    @Value("${springdoc.server.description}")
+    private String serverDescription;
+
+
 
     @Bean
     public OpenAPI openAPI() {
@@ -25,10 +31,10 @@ public class SwaggerConfig {
                 .contact(new Contact().name("frérot").url("https://frerot.dev"))
                 .license(new License().name("MIT").url("https://github.com/iamfrerot/userverse/blob/main/LICENSE"));
 
-        Server localServer = new Server().url("http://localhost:2000").description("Local Server");
-        Server nestServer= new Server().url("https://userverse.frerot.hackclub.app").description("Nest Server");
+        Server server= new Server().url(serverUrl).description(serverDescription);
+        
         return new OpenAPI()
                 .info(info)
-                .servers(List.of(nestServer,localServer));
+                .servers(List.of(server));
     }
 }
